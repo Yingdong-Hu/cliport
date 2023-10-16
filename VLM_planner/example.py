@@ -49,6 +49,7 @@ for i in range(n_eval):
 
     env.set_task(task)
     obs = env.reset()
+    front_obs = obs['color'][0]   # front camera, 480 x 640 x 3
     info = env.info
     success = False
 
@@ -56,7 +57,7 @@ for i in range(n_eval):
     print(f'High Level Goal: {high_level_lang_goal}')
 
     #########################################################################
-    # feed 'prompt', 'high_level_lang_goal' and 'obs' to GPT-4V, get gpt4_plan
+    # feed 'prompt', 'high_level_lang_goal' and 'front_obs' to GPT-4V, get gpt4_plan
     gpt4_plan = None
     if i == 0:
         gpt4_plan = ['pick up the cyan block and place it on the pink block',
