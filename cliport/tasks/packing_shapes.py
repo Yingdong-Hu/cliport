@@ -82,7 +82,7 @@ class PackingShapes(Task):
         for i in range(n_objects):
             shape = obj_shapes[i]
             size = (0.08, 0.08, 0.02)
-            pose= self.get_random_pose(env, size)
+            pose = self.get_random_pose(env, size)
             fname = f'{shape:02d}.obj'
             fname = os.path.join(self.assets_root, 'kitting', fname)
             scale = [0.003, 0.003, 0.001]  # .0005

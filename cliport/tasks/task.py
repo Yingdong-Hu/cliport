@@ -41,7 +41,6 @@ class Task():
         self.progress = 0
         self._rewards = 0
 
-
         self.assets_root = None
 
     def reset(self, env):  # pylint: disable=unused-argument
@@ -65,7 +64,7 @@ class Task():
             """Calculate action."""
 
             # Oracle uses perfect RGB-D orthographic images and segmentation masks.
-            _, hmap, obj_mask = self.get_true_image(env)
+            cmap, hmap, obj_mask = self.get_true_image(env)
 
             # Unpack next goal step.
             objs, matches, targs, replace, rotations, _, _, _ = self.goals[0]
@@ -125,13 +124,21 @@ class Task():
                 self.goals = []
                 self.lang_goals = []
                 print('Object for pick is not visible. Skipping demonstration.')
+                # # save cmap image
+                # import imageio
+                # imageio.imwrite('/home/huyingdong/cliport-master/images/cmap.png', cmap)
+
                 return
 
             # Get picking pose.
-            pick_prob = np.float32(pick_mask)
-            pick_pix = utils.sample_distribution(pick_prob)
+            # pick_prob = np.float32(pick_mask)
+            # pick_pix = utils.sample_distribution(pick_prob)
+
+            # Get picking pose.
+            pick_pix = utils.sample_gaussian_distribution(pick_mask)
+
             # For "deterministic" demonstrations on insertion-easy, use this:
-            # pick_pix = (160,80)
+            # pick_pix = (160, 80)
             pick_pos = utils.pix_to_xyz(pick_pix, hmap,
                                         self.bounds, self.pix_size)
             pick_pose = (np.asarray(pick_pos), np.asarray((0, 0, 0, 1)))
@@ -233,7 +240,7 @@ class Task():
           True if the episode should be considered a success, which we
             use for measuring successes, which is particularly helpful for tasks
             where one may get successes on the very last time step, e.g., getting
-            the cloth coverage threshold on the last alllowed action.
+            the cloth coverage threshold on the last allowed action.
             However, for bag-items-easy and bag-items-hard (which use the
             'bag-items' metric), it may be necessary to filter out demos that did
             not attain sufficiently high reward in external code. Currently, this
@@ -288,7 +295,7 @@ class Task():
         mask = np.int32(cmaps)[0, Ellipsis, 3:].squeeze()
         return cmap, hmap, mask
 
-    def get_random_pose(self, env, obj_size):
+    def get_random_pose(self, env, obj_size, obstacle_pos=None):
         """Get random collision-free object pose within workspace bounds."""
 
         # Get erosion size of object in pixels.
@@ -302,6 +309,13 @@ class Task():
         for obj_ids in env.obj_ids.values():
             for obj_id in obj_ids:
                 free[obj_mask == obj_id] = 0
+
+        if obstacle_pos is not None:
+            assert isinstance(obstacle_pos, list)
+            for i in range(len(obstacle_pos)):
+                obstacle_pix = utils.xyz_to_pix(obstacle_pos[i], self.bounds, self.pix_size)
+                free[obstacle_pix[0] - 16:obstacle_pix[0] + 16, obstacle_pix[1] - 16:obstacle_pix[1] + 16] = 0
+
         free[0, :], free[:, 0], free[-1, :], free[:, -1] = 0, 0, 0, 0
         free = cv2.erode(free, np.ones((erode_size, erode_size), np.uint8))
         if np.sum(free) == 0:

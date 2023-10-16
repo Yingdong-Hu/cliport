@@ -16,7 +16,7 @@ from pytorch_lightning.loggers import WandbLogger
 @hydra.main(config_path="./cfg", config_name='train')
 def main(cfg):
     # Logger
-    wandb_logger = WandbLogger(name=cfg['tag']) if cfg['train']['log'] else None
+    wandb_logger = WandbLogger(name=cfg['tag'], project='CLIPort') if cfg['train']['log'] else None
 
     # Checkpoint saver
     hydra_dir = Path(os.getcwd())
@@ -73,6 +73,7 @@ def main(cfg):
 
     # Main training loop
     trainer.fit(agent)
+
 
 if __name__ == '__main__':
     main()

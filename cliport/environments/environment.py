@@ -320,6 +320,10 @@ class Environment(gym.Env):
                 info[obj_id] = (pos, rot, dim)
 
         info['lang_goal'] = self.get_lang_goal()
+        if hasattr(self.task, 'high_level_lang_goal'):
+            info['high_level_lang_goal'] = self.task.high_level_lang_goal
+        if hasattr(self.task, 'success'):
+            info['success'] = self.task.success()
         return info
 
     def set_task(self, task):

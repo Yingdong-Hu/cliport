@@ -15,6 +15,7 @@ from cliport.models.streams.two_stream_transport import TwoStreamTransport
 from cliport.models.streams.two_stream_attention import TwoStreamAttentionLat
 from cliport.models.streams.two_stream_transport import TwoStreamTransportLat
 
+
 class TransporterAgent(LightningModule):
     def __init__(self, name, cfg, train_ds, test_ds):
         super().__init__()

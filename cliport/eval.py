@@ -177,6 +177,9 @@ def list_ckpts_to_eval(vcfg, existing_results):
     elif vcfg['checkpoint_type'] == 'val_missing':
         checkpoints = sorted([c for c in os.listdir(vcfg['model_path']) if "steps=" in c])
         ckpts_to_eval = [c for c in checkpoints if c not in existing_results]
+        # sort according to training steps
+        steps = [int(c.split('steps=')[1].split('-')[0]) for c in ckpts_to_eval]
+        ckpts_to_eval = [c for _, c in sorted(zip(steps, ckpts_to_eval))]
 
     # Find the best checkpoint from validation and run eval on the test set.
     elif vcfg['checkpoint_type'] == 'test_best':

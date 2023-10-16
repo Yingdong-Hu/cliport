@@ -20,6 +20,8 @@ from omegaconf import OmegaConf
 import os
 import torch
 
+from scipy.ndimage import gaussian_filter
+
 
 # -----------------------------------------------------------------------------
 # HEIGHTMAP UTILS
@@ -213,6 +215,24 @@ def sample_distribution(prob, n_samples=1):
         np.arange(len(flat_prob)), n_samples, p=flat_prob, replace=False)
     rand_ind_coords = np.array(np.unravel_index(rand_ind, prob.shape)).T
     return np.int32(rand_ind_coords.squeeze())
+
+
+def sample_gaussian_distribution(pick_mask, n_samples=1):
+    rows, cols = np.where(pick_mask == 1)
+    center_row = np.mean(rows)
+    center_col = np.mean(cols)
+    center_mask = np.zeros_like(pick_mask).astype(np.float32)
+    center_mask[int(center_row), int(center_col)] = 1.0
+    center_prob = gaussian_filter(center_mask, sigma=1)
+    pick_mask = pick_mask * center_prob
+
+    flat_prob = pick_mask.flatten() / np.sum(pick_mask)
+    rand_ind = np.random.choice(
+        np.arange(len(flat_prob)), n_samples, p=flat_prob, replace=False)
+    rand_ind_coords = np.array(np.unravel_index(rand_ind, pick_mask.shape)).T
+    return np.int32(rand_ind_coords.squeeze())
+
+
 
 
 # -------------------------------------------------------------------------
@@ -489,6 +509,7 @@ def q_mult(q1, q2):
     z = w1 * z2 + z1 * w2 + x1 * y2 - y1 * x2
     return (w, x, y, z)
 
+
 def perturb(input_image, pixels, theta_sigma=60, add_noise=False):
     """Data augmentation on images."""
     image_size = input_image.shape[:2]
@@ -620,6 +641,20 @@ COLORS = {
 
 TRAIN_COLORS = ['blue', 'red', 'green', 'yellow', 'brown', 'gray', 'cyan']
 EVAL_COLORS = ['blue', 'red', 'green', 'orange', 'purple', 'pink', 'white']
+ALL_COLORS = ['blue', 'red', 'green', 'yellow', 'brown', 'gray', 'cyan', 'orange', 'purple', 'pink', 'white']
+
+
+CORNER_OR_SIDE = {
+    'top left corner': (0.3, -0.45),
+    'top right corner': (0.3, 0.45),
+    'bottom left corner': (0.7, -0.45),
+    'bottom right corner': (0.7, 0.45),
+    'top side': (0.3, 0.0),
+    'bottom side': (0.7, 0.0),
+    'left side': (0.5, -0.45),
+    'right side': (0.5, 0.45),
+}
+
 
 def plot(fname,  # pylint: disable=dangerous-default-value
          title,

@@ -15,7 +15,7 @@ class PackingBoxesPairsUnseenColors(Task):
     def __init__(self):
         super().__init__()
         self.max_steps = 20
-        self.lang_template = "pack all the {colors} blocks into the brown box" # should have called it boxes :(
+        self.lang_template = "pack all the {colors} blocks into the brown box"  # should have called it boxes :(
         self.task_completed_desc = "done packing blocks."
 
         # Tight z-bound (0.0525) to discourage stuffing everything into the brown box

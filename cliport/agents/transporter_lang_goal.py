@@ -267,7 +267,6 @@ class OriginalTransporterLangFusionAgent(TwoStreamClipLingUNetTransporterAgent):
         )
 
 
-
 class ClipLingUNetTransporterAgent(TwoStreamClipLingUNetTransporterAgent):
 
     def __init__(self, name, cfg, train_ds, test_ds):

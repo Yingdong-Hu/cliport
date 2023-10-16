@@ -7,6 +7,7 @@ from cliport.utils import utils
 import pybullet as p
 import random
 
+
 class StackBlockPyramidSeqUnseenColors(Task):
     """Stacking Block Pyramid Sequence base class."""
 

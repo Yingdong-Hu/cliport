@@ -53,7 +53,7 @@ class Transport(nn.Module):
         """Correlate two input tensors."""
         output = F.conv2d(in0, in1, padding=(self.pad_size, self.pad_size))
         output = F.interpolate(output, size=(in0.shape[-2], in0.shape[-1]), mode='bilinear')
-        output = output[:,:,self.pad_size:-self.pad_size, self.pad_size:-self.pad_size]
+        output = output[:, :, self.pad_size:-self.pad_size, self.pad_size:-self.pad_size]
         if softmax:
             output_shape = output.shape
             output = output.reshape((1, np.prod(output.shape)))
@@ -71,7 +71,7 @@ class Transport(nn.Module):
         img_unprocessed = np.pad(inp_img, self.padding, mode='constant')
         input_data = img_unprocessed
         in_shape = (1,) + input_data.shape
-        input_data = input_data.reshape(in_shape) # [B W H D]
+        input_data = input_data.reshape(in_shape)  # [B W H D]
         in_tensor = torch.from_numpy(input_data).to(dtype=torch.float, device=self.device)
 
         # Rotation pivot.

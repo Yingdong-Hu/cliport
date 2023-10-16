@@ -65,7 +65,6 @@ class RavensDataset(Dataset):
             episodes = np.random.choice(range(self.n_episodes), self.n_demos, False)
             self.set(episodes)
 
-
     def add(self, seed, episode):
         """Add an episode to the dataset.
 
@@ -173,7 +172,7 @@ class RavensDataset(Dataset):
 
         p0, p1 = None, None
         p0_theta, p1_theta = None, None
-        perturb_params =  None
+        perturb_params = None
 
         if act:
             p0_xyz, p0_xyzw = act['pose0']
@@ -448,6 +447,18 @@ class RavensMultiTaskDataset(RavensDataset):
             ],
         },
 
+        # blocks and bowls tasks
+        'multi-blocks-and-bowls': {
+            'train': ['stack-blocks',
+                      'put-blocks-on-corner-side',
+                      'put-blocks-matching-colors'],
+            'val': ['stack-blocks',
+                    'put-blocks-on-corner-side',
+                    'put-blocks-matching-colors'],
+            'test': ['stack-blocks',
+                     'put-blocks-on-corner-side',
+                     'put-blocks-matching-colors'],
+        },
 
         ##### multi-attr tasks
         'multi-attr-align-rope': {
@@ -495,7 +506,7 @@ class RavensMultiTaskDataset(RavensDataset):
         'multi-attr-assembling-kits-seq-unseen-colors': {
             'train': [
                 'align-rope',
-                'assembling-kits-seq-seen-colors', # seen only
+                'assembling-kits-seq-seen-colors',  # seen only
                 'packing-boxes-pairs-full',
                 'packing-shapes',
                 'packing-seen-google-objects-seq',
@@ -711,7 +722,7 @@ class RavensMultiTaskDataset(RavensDataset):
 
         if self.n_demos > 0:
             self.images = self.cfg['dataset']['images']
-            self.cache = False # TODO(mohit): fix caching for multi-task dataset
+            self.cache = False  # TODO(mohit): fix caching for multi-task dataset
             self.set(episodes)
 
         self._path = None
@@ -763,7 +774,7 @@ class RavensMultiTaskDataset(RavensDataset):
         else:
             all_other_tasks = list(self.tasks)
             all_other_tasks.remove(self.attr_train_task)
-            all_tasks = [self.attr_train_task] + all_other_tasks # add seen task in the front
+            all_tasks = [self.attr_train_task] + all_other_tasks  # add seen task in the front
 
             # 50% chance of sampling the main seen task and 50% chance of sampling any other seen-unseen task
             mult_attr_seen_sample_prob = 0.5

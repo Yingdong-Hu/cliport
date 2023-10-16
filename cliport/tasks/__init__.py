@@ -41,8 +41,18 @@ from cliport.tasks.towers_of_hanoi_seq import TowersOfHanoiSeqSeenColors
 from cliport.tasks.towers_of_hanoi_seq import TowersOfHanoiSeqUnseenColors
 from cliport.tasks.towers_of_hanoi_seq import TowersOfHanoiSeqFull
 
+from cliport.tasks.new_stack_blocks import StackBlocks
+from cliport.tasks.new_put_blocks_on_corner_side import PutBlocksOnCornerSide
+from cliport.tasks.new_put_blocks_matching_colors import PutBlocksMatchingColors
+from cliport.tasks.new_put_blocks_mismatched_colors import PutBlocksMismatchedColors
+from cliport.tasks.new_put_blocks_different_corners import PutBlocksDifferentCorners
+from cliport.tasks.new_stack_blocks_cool_colors import StackBlocksCoolColors
+from cliport.tasks.new_stack_blocks_warm_colors import StackBlocksWarmColors
+from cliport.tasks.new_sort_primary_color_blocks import SortPrimaryColorBlocks
+
+
 names = {
-    # demo conditioned
+    # demo conditioned (original Transporter Networks paper)
     'align-box-corner': AlignBoxCorner,
     'assembling-kits': AssemblingKits,
     'assembling-kits-easy': AssemblingKitsEasy,
@@ -59,7 +69,7 @@ names = {
     'sweeping-piles': SweepingPiles,
     'towers-of-hanoi': TowersOfHanoi,
 
-    # goal conditioned
+    # goal conditioned (CLIPort paper)
     'align-rope': AlignRope,
     'assembling-kits-seq-seen-colors': AssemblingKitsSeqSeenColors,
     'assembling-kits-seq-unseen-colors': AssemblingKitsSeqUnseenColors,
@@ -84,4 +94,14 @@ names = {
     'towers-of-hanoi-seq-seen-colors': TowersOfHanoiSeqSeenColors,
     'towers-of-hanoi-seq-unseen-colors': TowersOfHanoiSeqUnseenColors,
     'towers-of-hanoi-seq-full': TowersOfHanoiSeqFull,
+
+    # my new tasks
+    'stack-blocks': StackBlocks,
+    'put-blocks-on-corner-side': PutBlocksOnCornerSide,
+    'put-blocks-matching-colors': PutBlocksMatchingColors,
+    'put-blocks-mismatched-colors': PutBlocksMismatchedColors,
+    'put-blocks-different-corners': PutBlocksDifferentCorners,
+    'stack-blocks-cool-colors': StackBlocksCoolColors,
+    'stack-blocks-warm-colors': StackBlocksWarmColors,
+    'sort-primary-color-blocks': SortPrimaryColorBlocks,
 }
