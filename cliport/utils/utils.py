@@ -233,8 +233,6 @@ def sample_gaussian_distribution(pick_mask, n_samples=1):
     return np.int32(rand_ind_coords.squeeze())
 
 
-
-
 # -------------------------------------------------------------------------
 # Transformation Helper Functions
 # -------------------------------------------------------------------------
@@ -642,7 +640,7 @@ COLORS = {
 TRAIN_COLORS = ['blue', 'red', 'green', 'yellow', 'brown', 'gray', 'cyan']
 EVAL_COLORS = ['blue', 'red', 'green', 'orange', 'purple', 'pink', 'white']
 ALL_COLORS = ['blue', 'red', 'green', 'yellow', 'brown', 'gray', 'cyan', 'orange', 'purple', 'pink', 'white']
-
+tmp = ('', 'red', '', '', '', '', '', '', '', '')
 
 CORNER_OR_SIDE = {
     'top left corner': (0.3, -0.45),

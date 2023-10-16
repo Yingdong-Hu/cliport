@@ -124,10 +124,6 @@ class Task():
                 self.goals = []
                 self.lang_goals = []
                 print('Object for pick is not visible. Skipping demonstration.')
-                # # save cmap image
-                # import imageio
-                # imageio.imwrite('/home/huyingdong/cliport-master/images/cmap.png', cmap)
-
                 return
 
             # Get picking pose.
