@@ -21,8 +21,8 @@ class PutBlocksDifferentCorners(Task):
 
     def reset(self, env):
         super().reset(env)
-        n_bowls = np.random.randint(2, 4)
-        n_blocks = np.random.randint(2, 5)
+        n_bowls = np.random.randint(1, 3)   # 1, 2
+        n_blocks = np.random.randint(2, 5)  # 2, 3, 4
 
         color_names = self.get_colors()
         bowl_color_names = random.sample(color_names, n_bowls)

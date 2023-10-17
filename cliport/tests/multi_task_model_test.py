@@ -29,10 +29,14 @@ model_folder = 'exps'                  # path to pre-trained checkpoint
 ckpt_name = 'last.ckpt'  # name of checkpoint to load
 
 ### Uncomment the task you want to evaluate on ###
-# eval_task = 'stack-block-pyramid-seq-seen-colors'
-# eval_task = 'stack-blocks'
-eval_task = 'put-blocks-on-corner-side'
+eval_task = 'stack-blocks'
+# eval_task = 'put-blocks-on-corner-side'
 # eval_task = 'put-blocks-matching-colors'
+# eval_task = 'put-blocks-mismatched-colors'
+# eval_task = 'put-blocks-different-corners'
+# eval_task = 'stack-blocks-cool-colors'
+# eval_task = 'stack-blocks-warm-colors'
+# eval_task = 'sort-primary-color-blocks'
 
 root_dir = '/home/huyingdong/cliport-master'
 assets_root = os.path.join(root_dir, 'cliport/environments/assets/')
@@ -124,6 +128,15 @@ for i in range(num_eval_instances):
     # Rollout
     while (step <= task.max_steps) and not done:
         print(f"Step: {step + 1} ({task.max_steps} max)")
+
+        # if step == 0:
+        #     info['lang_goal'] = 'pick up the white block and place it on the bottom left corner'
+        # elif step == 1:
+        #     info['lang_goal'] = 'pick up the blue block and place it on the top right corner'
+        # elif step == 2:
+        #     info['lang_goal'] = 'pick up the orange block and place it on the top left corner'
+        # elif step == 3:
+        #     info['lang_goal'] = 'pick up the purple block and place it on the bottom right corner'
 
         # Get action predictions
         action = agent.act(obs, info, goal=None)

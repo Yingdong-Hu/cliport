@@ -639,8 +639,7 @@ COLORS = {
 
 TRAIN_COLORS = ['blue', 'red', 'green', 'yellow', 'brown', 'gray', 'cyan']
 EVAL_COLORS = ['blue', 'red', 'green', 'orange', 'purple', 'pink', 'white']
-ALL_COLORS = ['blue', 'red', 'green', 'yellow', 'brown', 'gray', 'cyan', 'orange', 'purple', 'pink', 'white']
-tmp = ('', 'red', '', '', '', '', '', '', '', '')
+ALL_COLORS = ['blue', 'red', 'green', 'yellow', 'brown', 'cyan', 'orange', 'purple', 'pink', 'white']
 
 CORNER_OR_SIDE = {
     'top left corner': (0.3, -0.45),

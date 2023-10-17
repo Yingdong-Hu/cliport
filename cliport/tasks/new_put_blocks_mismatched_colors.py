@@ -16,13 +16,13 @@ class PutBlocksMismatchedColors(Task):
         super().__init__()
         self.max_steps = 10
         self.pos_eps = 0.05
-        self.lang_template = "put the blocks in the bowls with mismatched colors"
-        self.task_completed_desc = "done putting all the blocks in the bowls with mismatched colors."
+        self.lang_template = "pick up the {pick} block and place it on the {place} bowl"
+        self.task_completed_desc = "done putting all the blocks on the bowls with mismatched colors."
 
     def reset(self, env):
         super().reset(env)
-        n_blocks = np.random.randint(3, 6)
-        n_bowls = n_blocks + np.random.randint(2, 4)
+        n_blocks = np.random.randint(2, 4)   # 2, 3
+        n_bowls = n_blocks + 1
 
         color_names = self.get_colors()
         block_color_names = random.sample(color_names, n_blocks)
@@ -60,17 +60,48 @@ class PutBlocksMismatchedColors(Task):
         targ_matrix = np.ones((len(blocks), len(bowl_poses)))
         for i in range(len(blocks)):
             targ_matrix[i, i] = 0
-        self.goals.append((blocks, targ_matrix, bowl_poses, False, True, 'pose', None, 1))
-        self.lang_goals.append(self.lang_template)
-
         self.targ_matrix = targ_matrix
+
+        block_bowl_pairs = []
+        block_bowl_color_pairs = []
+        matches = targ_matrix.copy()
+        for _ in range(n_blocks):
+            nn_dists = []
+            nn_targets = []
+            for i in range(n_blocks):
+                object_id, (symmetry, _) = blocks[i]
+                xyz, _ = p.getBasePositionAndOrientation(object_id)
+                targets_i = np.argwhere(matches[i, :]).reshape(-1)
+                if len(targets_i) > 0:
+                    targets_xyz = np.float32([bowl_poses[j][0] for j in targets_i])
+                    dists = np.linalg.norm(targets_xyz - np.float32(xyz).reshape(1, 3), axis=1)
+                    nn = np.argmin(dists)
+                    nn_dists.append(dists[nn])
+                    nn_targets.append(targets_i[nn])
+                else:
+                    nn_dists.append(0)
+                    nn_targets.append(-1)
+            order = np.argsort(nn_dists)[::-1]
+            order = [i for i in order if nn_dists[i] > 0]
+            block_idx = order[0]
+            block_bowl_pairs.append((blocks[block_idx], bowl_poses[nn_targets[block_idx]]))
+            block_bowl_color_pairs.append((block_color_names[block_idx], bowl_color_names[nn_targets[block_idx]]))
+            matches[block_idx, :] = 0
+            matches[:, nn_targets[block_idx]] = 0
+
+        for i in range(len(block_bowl_pairs)):
+            self.goals.append(([block_bowl_pairs[i][0]], np.ones((1, 1)), [block_bowl_pairs[i][1]],
+                               False, True, 'pose', None, 1 / n_blocks))
+            self.lang_goals.append(self.lang_template.format(pick=block_bowl_color_pairs[i][0],
+                                                             place=block_bowl_color_pairs[i][1]))
+
         self.blocks = blocks
         self.bowl_poses = bowl_poses
 
         # Only one mistake allowed.
         self.max_steps = n_blocks + 1
 
-        self.high_level_lang_goal = 'put the blocks in the bowls with mismatched colors'
+        self.high_level_lang_goal = 'put the blocks on the bowls with mismatched colors'
 
     def get_colors(self):
         all_colors = utils.ALL_COLORS

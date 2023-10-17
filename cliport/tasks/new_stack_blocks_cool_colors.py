@@ -21,9 +21,9 @@ class StackBlocksCoolColors(Task):
 
     def reset(self, env):
         super().reset(env)
-        n_bowls = np.random.randint(2, 4)
-        n_cool_blocks = np.random.randint(2, 5)
-        n_warm_blocks = np.random.randint(2, 5)
+        n_bowls = np.random.randint(1, 3)
+        n_cool_blocks = np.random.randint(2, 4)  # 2, 3
+        n_warm_blocks = np.random.randint(2, 4)  # 2, 3
 
         color_names = self.get_colors()
         cool_colors = ['blue', 'green', 'cyan', 'purple']

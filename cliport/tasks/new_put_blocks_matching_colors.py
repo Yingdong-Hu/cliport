@@ -17,11 +17,11 @@ class PutBlocksMatchingColors(Task):
         self.max_steps = 10
         self.pos_eps = 0.05
         self.lang_template = "pick up the {pick} block and place it on the {place} bowl"
-        self.task_completed_desc = "done putting all the blocks in the bowls with matching colors."
+        self.task_completed_desc = "done putting all the blocks on the bowls with matching colors."
 
     def reset(self, env):
         super().reset(env)
-        n_bowls = np.random.randint(3, 6)
+        n_bowls = np.random.randint(2, 4)  # 2, 3
 
         color_names = self.get_colors()
         selected_color_names = random.sample(color_names, n_bowls)
@@ -69,7 +69,7 @@ class PutBlocksMatchingColors(Task):
         distractor_colors = [utils.COLORS[c] for c in distractor_color_names]
 
         n_distractors = 0
-        max_distractos = np.random.randint(2, 4)
+        max_distractos = np.random.randint(1, 2)
         while n_distractors < max_distractos:
             is_block = np.random.rand() > 0.5
             urdf = block_urdf if is_block else bowl_urdf
@@ -84,7 +84,7 @@ class PutBlocksMatchingColors(Task):
             p.changeVisualShape(obj_id, -1, rgbaColor=color + [1])
             n_distractors += 1
 
-        self.high_level_lang_goal = 'put all the blocks in the bowls with matching colors'
+        self.high_level_lang_goal = 'put all the blocks on the bowls with matching colors'
 
     def get_colors(self):
         all_colors = utils.ALL_COLORS

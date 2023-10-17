@@ -21,8 +21,8 @@ class StackBlocks(Task):
 
     def reset(self, env):
         super().reset(env)
-        n_bowls = np.random.randint(1, 4)
-        n_blocks = np.random.randint(3, 6)
+        n_bowls = np.random.randint(1, 4)   # 1, 2, 3
+        n_blocks = np.random.randint(3, 5)  # 3, 4
 
         color_names = self.get_colors()
         bowl_color_names = random.sample(color_names, n_bowls)

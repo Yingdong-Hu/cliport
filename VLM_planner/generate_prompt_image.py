@@ -7,23 +7,17 @@ import numpy as np
 from cliport import tasks
 from cliport.environments.environment import Environment
 
+# stack-blocks
+# put-blocks-on-corner-side
+# put-blocks-matching-colors
+for task_name in ['put-blocks-matching-colors']:
 
-# for task_name in ['stack-blocks', 'put-blocks-on-corner-side',
-#                   'put-blocks-matching-colors', 'put-blocks-mismatched-colors',
-#                   'put-blocks-different-corners', 'stack-blocks-cool-colors',
-#                   'stack-blocks-warm-colors', 'sort-primary-color-blocks']:
-
-for task_name in ['sort-primary-color-blocks']:
-
-    n_eval = 10
+    n_eval = 1
     save_video = False
     root_dir = '/home/huyingdong/cliport-master'
     assets_root = os.path.join(root_dir, 'cliport/environments/assets/')
 
-    save_dir = '/home/huyingdong/cliport-master/VLM_planner/testdata'
-    save_dir = os.path.join(save_dir, task_name)
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
+    save_dir = '/home/huyingdong/cliport-master/VLM_planner/testdata/prompt'
 
     record_cfg = {
         'save_video': save_video,
@@ -44,7 +38,11 @@ for task_name in ['sort-primary-color-blocks']:
 
     task = tasks.names[task_name]()
     task.mode = 'test'
-    seed = 9999
+
+    if task_name == 'put-blocks-on-corner-side':
+        seed = 10000
+    else:
+        seed = 9999
 
     # Initialize scripted oracle agent
     agent = task.step_oracle(env)
@@ -52,7 +50,6 @@ for task_name in ['sort-primary-color-blocks']:
     success_times = 0
 
     for i in range(n_eval):
-        print(f'\nEvaluation Instance: {i + 1}/{n_eval}')
 
         # Set seeds.
         seed += 2
@@ -74,12 +71,7 @@ for task_name in ['sort-primary-color-blocks']:
         high_level_lang_goal = 'Task: ' + high_level_lang_goal
         print(high_level_lang_goal)
 
-        episode_dir = os.path.join(save_dir, f'episode_{i}')
-        os.makedirs(episode_dir, exist_ok=True)
         # save front_obs to episode_dir
-        imageio.imwrite(os.path.join(episode_dir, 'front_obs.png'), front_obs)
+        imageio.imwrite(os.path.join(save_dir, '{}-front_obs.png'.format(task_name)), front_obs)
         # save top_down_obs to episode_dir
-        imageio.imwrite(os.path.join(episode_dir, 'top_down_obs.png'), top_down_obs)
-        # save high_level_lang_goal to episode_dir
-        with open(os.path.join(episode_dir, 'instruction.txt'), 'w') as f:
-            f.write(high_level_lang_goal)
+        imageio.imwrite(os.path.join(save_dir, '{}-top_down_obs.png'.format(task_name)), top_down_obs)

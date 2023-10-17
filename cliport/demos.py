@@ -69,17 +69,19 @@ def main(cfg):
         if record:
             env.start_rec(f'{dataset.n_episodes+1:06d}')
 
+        high_level_lang_goal = info['high_level_lang_goal']
+        print(f'High Level Goal: {high_level_lang_goal}')
+
         # Rollout expert policy
         for _ in range(task.max_steps):
             act = agent.act(obs, info)
             # act = agent.act(info['lang_goal'])
             episode.append((obs, act, reward, info))
-            lang_goal, high_level_lang_goal = info['lang_goal'], info['high_level_lang_goal']
+            lang_goal = info['lang_goal']
             obs, reward, done, info = env.step(act)
             success = info['success']
             total_reward += reward
             # print(f'Total Reward: {total_reward:.3f} | Done: {done} | Goal: {lang_goal}')
-            print(f'High Level Goal: {high_level_lang_goal}')
             print(f'Total Reward: {total_reward:.3f} | Done: {done} | Success: {success} | Goal: {lang_goal}')
             if done:
                 break
