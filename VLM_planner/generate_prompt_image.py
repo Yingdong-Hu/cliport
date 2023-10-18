@@ -10,7 +10,7 @@ from cliport.environments.environment import Environment
 # stack-blocks
 # put-blocks-on-corner-side
 # put-blocks-matching-colors
-for task_name in ['put-blocks-matching-colors']:
+for task_name in ['stack-blocks']:
 
     n_eval = 1
     save_video = False
@@ -43,9 +43,6 @@ for task_name in ['put-blocks-matching-colors']:
         seed = 10000
     else:
         seed = 9999
-
-    # Initialize scripted oracle agent
-    agent = task.step_oracle(env)
 
     success_times = 0
 

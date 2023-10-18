@@ -129,6 +129,8 @@ def main(vcfg):
                     env.start_rec(video_name)
 
                 for _ in range(task.max_steps):
+                    if vcfg['high_level_lang_goal']:
+                        info['lang_goal'] = info['high_level_lang_goal']
                     act = agent.act(obs, info, goal)
                     lang_goal = info['lang_goal']
                     print(f'Lang Goal: {lang_goal}')

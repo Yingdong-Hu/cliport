@@ -43,6 +43,8 @@ class RavensDataset(Dataset):
         self.cam_config = cameras.RealSenseD415.CONFIG
         self.bounds = np.array([[0.25, 0.75], [-0.5, 0.5], [0, 0.28]])
 
+        self.high_level_lang_goal = self.cfg['dataset']['high_level_lang_goal']
+
         # Track existing dataset if it exists.
         color_path = os.path.join(self._path, 'action')
         if os.path.exists(color_path):
@@ -200,7 +202,10 @@ class RavensDataset(Dataset):
             warnings.warn("No language goal. Defaulting to 'task completed.'")
 
         if info and 'lang_goal' in info:
-            sample['lang_goal'] = info['lang_goal']
+            if self.high_level_lang_goal:
+                sample['lang_goal'] = info['high_level_lang_goal']
+            else:
+                sample['lang_goal'] = info['lang_goal']
         else:
             sample['lang_goal'] = "task completed."
 
@@ -230,7 +235,10 @@ class RavensDataset(Dataset):
             warnings.warn("No language goal. Defaulting to 'task completed.'")
 
         if info and 'lang_goal' in info:
-            sample['lang_goal'] = info['lang_goal']
+            if self.high_level_lang_goal:
+                sample['lang_goal'] = info['high_level_lang_goal']
+            else:
+                sample['lang_goal'] = info['lang_goal']
         else:
             sample['lang_goal'] = "task completed."
 
@@ -458,6 +466,22 @@ class RavensMultiTaskDataset(RavensDataset):
             'test': ['stack-blocks',
                      'put-blocks-on-corner-side',
                      'put-blocks-matching-colors'],
+        },
+
+        # To train primitive policy, add 'put-blocks-mismatched-colors'
+        'multi-blocks-and-bowls-primitive': {
+            'train': ['stack-blocks',
+                      'put-blocks-on-corner-side',
+                      'put-blocks-matching-colors',
+                      'put-blocks-mismatched-colors'],
+            'val': ['stack-blocks',
+                    'put-blocks-on-corner-side',
+                    'put-blocks-matching-colors',
+                    'put-blocks-mismatched-colors'],
+            'test': ['stack-blocks',
+                     'put-blocks-on-corner-side',
+                     'put-blocks-matching-colors',
+                     'put-blocks-mismatched-colors'],
         },
 
         ##### multi-attr tasks
@@ -700,6 +724,8 @@ class RavensMultiTaskDataset(RavensDataset):
         self.in_shape = (320, 160, 6)
         self.cam_config = cameras.RealSenseD415.CONFIG
         self.bounds = np.array([[0.25, 0.75], [-0.5, 0.5], [0, 0.28]])
+
+        self.high_level_lang_goal = self.cfg['dataset']['high_level_lang_goal']
 
         self.n_episodes = {}
         episodes = {}

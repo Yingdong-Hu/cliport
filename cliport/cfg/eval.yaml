@@ -19,6 +19,7 @@ save_results: True # write results to json
 update_results: False # overwrite existing json results?
 checkpoint_type: 'val_missing'
 val_on_heldout: True
+high_level_lang_goal: False  # use high-level language goal instead of step goal
 
 disp: False
 shared_memory: False

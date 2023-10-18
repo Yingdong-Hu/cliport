@@ -16,8 +16,9 @@ class PutBlocksDifferentCorners(Task):
         super().__init__()
         self.max_steps = 10
         self.pos_eps = 0.05
-        self.lang_template = "put all the blocks in different corners"
-        self.task_completed_desc = "done putting all the blocks in different corners."
+        # self.lang_template = "put all the blocks on different corners"
+        self.lang_template = "pick up the {pick} block and place it on the {place}"
+        self.task_completed_desc = "done putting all the blocks on different corners."
 
     def reset(self, env):
         super().reset(env)
@@ -60,21 +61,49 @@ class PutBlocksDifferentCorners(Task):
             p.changeVisualShape(block_id, -1, rgbaColor=block_colors[i] + [1])
             blocks.append((block_id, (0, None)))
             self.color2block_id[block_color_names[i]] = block_id
+        self.blocks = blocks
 
         all_corner_pose = [(c, (0, 0, 0, 1)) for c in all_corner_pos]
+        self.all_corner_pose = all_corner_pose
         # Goal: put all the blocks in different corners
         targ_matrix = np.ones((len(blocks), len(all_corner_pos)))
-        self.goals.append((blocks, targ_matrix, all_corner_pose, False, True, 'pose', None, 1))
-        self.lang_goals.append(self.lang_template)
-
         self.targ_matrix = targ_matrix
-        self.blocks = blocks
-        self.all_corner_pose = all_corner_pose
 
+        block_corner_pairs = []
+        block_cornername_pairs = []
+        matches = targ_matrix.copy()
+        for _ in range(n_blocks):
+            nn_dists = []
+            nn_targets = []
+            for i in range(n_blocks):
+                object_id, (symmetry, _) = blocks[i]
+                xyz, _ = p.getBasePositionAndOrientation(object_id)
+                targets_i = np.argwhere(matches[i, :]).reshape(-1)
+                if len(targets_i) > 0:
+                    targets_xyz = np.float32([all_corner_pose[j][0] for j in targets_i])
+                    dists = np.linalg.norm(targets_xyz - np.float32(xyz).reshape(1, 3), axis=1)
+                    nn = np.argmin(dists)
+                    nn_dists.append(dists[nn])
+                    nn_targets.append(targets_i[nn])
+                else:
+                    nn_dists.append(0)
+                    nn_targets.append(-1)
+            order = np.argsort(nn_dists)[::-1]
+            order = [i for i in order if nn_dists[i] > 0]
+            block_idx = order[0]
+            block_corner_pairs.append((blocks[block_idx], all_corner_pose[nn_targets[block_idx]]))
+            block_cornername_pairs.append((block_color_names[block_idx], corner[nn_targets[block_idx]]))
+            matches[block_idx, :] = 0
+            matches[:, nn_targets[block_idx]] = 0
+
+        for i in range(n_blocks):
+            self.goals.append(([block_corner_pairs[i][0]], np.ones((1, 1)), [block_corner_pairs[i][1]],
+                               False, True, 'pose', None, 1 / n_blocks))
+            self.lang_goals.append(self.lang_template.format(pick=block_cornername_pairs[i][0],
+                                                             place=block_cornername_pairs[i][1]))
         # Only one mistake allowed.
         self.max_steps = n_blocks + 1
-
-        self.high_level_lang_goal = 'put all the blocks in different corners'
+        self.high_level_lang_goal = 'put all the blocks on different corners'
 
     def get_colors(self):
         all_colors = utils.ALL_COLORS
@@ -144,4 +173,3 @@ class PutBlocksDifferentCorners(Task):
             return {'pose0': pick_pose, 'pose1': place_pose}
 
         return OracleAgent(act)
-

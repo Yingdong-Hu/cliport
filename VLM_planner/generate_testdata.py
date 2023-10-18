@@ -8,14 +8,18 @@ from cliport import tasks
 from cliport.environments.environment import Environment
 
 
-# for task_name in ['stack-blocks', 'put-blocks-on-corner-side',
-#                   'put-blocks-matching-colors', 'put-blocks-mismatched-colors',
-#                   'put-blocks-different-corners', 'stack-blocks-cool-colors',
-#                   'stack-blocks-warm-colors', 'sort-primary-color-blocks']:
+for task_name in ['stack-blocks',
+                  'put-blocks-on-corner-side',
+                  'put-blocks-matching-colors',
+                  'put-blocks-mismatched-colors',
+                  'put-blocks-different-corners',
+                  'stack-blocks-cool-colors',
+                  'stack-blocks-warm-colors',
+                  'sort-primary-color-blocks']:
 
-for task_name in ['sort-primary-color-blocks']:
+# for task_name in ['sort-primary-color-blocks']:
 
-    n_eval = 10
+    n_eval = 20
     save_video = False
     root_dir = '/home/huyingdong/cliport-master'
     assets_root = os.path.join(root_dir, 'cliport/environments/assets/')
@@ -71,7 +75,7 @@ for task_name in ['sort-primary-color-blocks']:
         high_level_lang_goal = info['high_level_lang_goal']
         # capitalize the first letter
         high_level_lang_goal = high_level_lang_goal[0].upper() + high_level_lang_goal[1:]
-        high_level_lang_goal = 'Task: ' + high_level_lang_goal
+        high_level_lang_goal = 'This is the new task.\n' + 'Task: ' + high_level_lang_goal
         print(high_level_lang_goal)
 
         episode_dir = os.path.join(save_dir, f'episode_{i}')

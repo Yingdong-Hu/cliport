@@ -28,7 +28,7 @@ class SortPrimaryColorBlocks(Task):
         bowl_color_names = random.sample(color_names, n_bowls)
         bowl_colors = [utils.COLORS[cn] for cn in bowl_color_names]
 
-        primary_color_names = ['red', 'blue', 'yellow']
+        primary_color_names = ['red', 'yellow', 'blue']
         selected_primary_index = np.sort(np.random.choice([0, 1, 2], n_primary_blocks, replace=False))
         selected_primary_color_names = [primary_color_names[i] for i in selected_primary_index]
         selected_primary_colors = [utils.COLORS[cn] for cn in selected_primary_color_names]
