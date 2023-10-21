@@ -50,6 +50,15 @@ from cliport.tasks.new_stack_blocks_cool_colors import StackBlocksCoolColors
 from cliport.tasks.new_stack_blocks_warm_colors import StackBlocksWarmColors
 from cliport.tasks.new_sort_primary_color_blocks import SortPrimaryColorBlocks
 
+from cliport.tasks.new_put_letters_alphabetical_order import PutLettersAlphabeticalOrder
+from cliport.tasks.new_spell_word import SpellWord
+from cliport.tasks.new_separate_vowels import SeparateVowels
+from cliport.tasks.new_put_letters_reverse_alphabetical_order import PutLettersReverseAlphabeticalOrder
+from cliport.tasks.new_spell_sport import SpellSport
+from cliport.tasks.new_sort_symmetrical_letters import SortSymmetricalLetters
+from cliport.tasks.new_separate_consonants import SeparateConsonants
+from cliport.tasks.new_sort_letters_less_than_d import SortLettersLessThanD
+
 
 names = {
     # demo conditioned (original Transporter Networks paper)
@@ -95,7 +104,7 @@ names = {
     'towers-of-hanoi-seq-unseen-colors': TowersOfHanoiSeqUnseenColors,
     'towers-of-hanoi-seq-full': TowersOfHanoiSeqFull,
 
-    # my new tasks
+    # my new tasks (Blocks & Bowls)
     'stack-blocks': StackBlocks,
     'put-blocks-on-corner-side': PutBlocksOnCornerSide,
     'put-blocks-matching-colors': PutBlocksMatchingColors,
@@ -104,4 +113,14 @@ names = {
     'stack-blocks-cool-colors': StackBlocksCoolColors,
     'stack-blocks-warm-colors': StackBlocksWarmColors,
     'sort-primary-color-blocks': SortPrimaryColorBlocks,
+
+    # my new tasks (Letters)
+    'put-letters-alphabetical-order': PutLettersAlphabeticalOrder,
+    'spell-word': SpellWord,
+    'separate-vowels': SeparateVowels,
+    'put-letters-reverse-alphabetical-order': PutLettersReverseAlphabeticalOrder,
+    'spell-sport':  SpellSport,
+    'sort-symmetrical-letters': SortSymmetricalLetters,
+    'separate-consonants': SeparateConsonants,
+    'sort-letters-less-than-d': SortLettersLessThanD,
 }

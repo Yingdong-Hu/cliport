@@ -70,9 +70,26 @@ class AssemblingKitsSeqUnseenColors(Task):
         colors = [utils.COLORS[cn] for cn in color_names]
 
         symmetry = [
-            2 * np.pi, 2 * np.pi, 2 * np.pi / 3, np.pi / 2, np.pi / 2, 2 * np.pi,
-            np.pi, 2 * np.pi / 5, np.pi, np.pi / 2, 2 * np.pi / 5, 0, 2 * np.pi,
-            2 * np.pi, 2 * np.pi, 2 * np.pi, 0, 2 * np.pi / 6, 2 * np.pi, 2 * np.pi
+            2 * np.pi,
+            2 * np.pi,
+            2 * np.pi / 3,
+            np.pi / 2,
+            np.pi / 2,
+            2 * np.pi,
+            np.pi,
+            2 * np.pi / 5,
+            np.pi,
+            np.pi / 2,
+            2 * np.pi / 5,
+            0,
+            2 * np.pi,
+            2 * np.pi,
+            2 * np.pi,
+            2 * np.pi,
+            0,
+            2 * np.pi / 6,
+            2 * np.pi,
+            2 * np.pi
         ]
 
         # Build kit.

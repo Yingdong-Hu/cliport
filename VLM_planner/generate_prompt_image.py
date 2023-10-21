@@ -10,14 +10,21 @@ from cliport.environments.environment import Environment
 # stack-blocks
 # put-blocks-on-corner-side
 # put-blocks-matching-colors
-for task_name in ['stack-blocks']:
+
+# put-letters-alphabetical-order
+# spell-word
+# separate-vowels
+for task_name in ['separate-vowels']:
 
     n_eval = 1
     save_video = False
     root_dir = '/home/huyingdong/cliport-master'
     assets_root = os.path.join(root_dir, 'cliport/environments/assets/')
 
-    save_dir = '/home/huyingdong/cliport-master/VLM_planner/testdata/prompt'
+    data_dir = 'testdata-letters'
+    save_dir = os.path.join('/home/huyingdong/cliport-master/VLM_planner', data_dir, 'prompt')
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
 
     record_cfg = {
         'save_video': save_video,
@@ -44,8 +51,6 @@ for task_name in ['stack-blocks']:
     else:
         seed = 9999
 
-    success_times = 0
-
     for i in range(n_eval):
 
         # Set seeds.
@@ -57,8 +62,6 @@ for task_name in ['stack-blocks']:
         env.set_task(task)
         obs = env.reset()
         front_obs = obs['color'][0]   # front camera, 480 x 640 x 3
-        # top_down_obs, _, _ = task.get_true_image(env)
-        # top_down_obs = np.transpose(top_down_obs, (1, 0, 2))
         top_down_obs, _, _ = env.render_camera(task.oracle_cams[0])
         info = env.info
 

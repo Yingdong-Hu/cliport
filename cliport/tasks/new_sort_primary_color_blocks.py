@@ -17,7 +17,7 @@ class SortPrimaryColorBlocks(Task):
         self.max_steps = 10
         self.pos_eps = 0.05
         self.lang_template = "pick up the {pick} block and place it on the left side"
-        self.task_completed_desc = "done sorting the primary color blocks to the left side."
+        self.task_completed_desc = "done stacking the primary color blocks on the left side."
 
     def reset(self, env):
         super().reset(env)

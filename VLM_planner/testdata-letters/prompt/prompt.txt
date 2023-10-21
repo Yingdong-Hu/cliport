@@ -1,0 +1,20 @@
+Task: Put the letters on the tables in alphabetical order
+Step 1: pick up the C and place it on the bottom left side
+Step 2: pick up the D and place it on the right of C
+Step 3: pick up the I and place it on the right of D
+Step 4: pick up the L and place it on the right of I
+Step 5: pick up the W and place it on the right of L
+Step 6: done
+
+Task: Spell as much of "blue" as you can
+Step 1: pick up the L and place it on the bottom left corner
+Step 2: pick up the U and place it on the right of L
+Step 3: pick up the E and place it on the right of U
+Step 4: done
+
+Task: Separate the vowels from the remaining letters to the bottom side
+Step 1: pick up the A and place it on the bottom side
+Step 2: pick up the I and place it on the right of A
+Step 3: pick up the O and place it on the right of I
+Step 4: pick up the U and place it on the right of O
+Step 5: done

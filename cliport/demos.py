@@ -26,8 +26,8 @@ def main(cfg):
     save_data = cfg['save_data']
 
     # Initialize scripted oracle agent and dataset.
-    agent = task.oracle(env)
-    # agent = task.step_oracle(env)
+    # agent = task.oracle(env)
+    agent = task.step_oracle(env)
     data_path = os.path.join(cfg['data_dir'], "{}-{}".format(cfg['task'], task.mode))
     dataset = RavensDataset(data_path, cfg, n_demos=0, augment=False)
     print(f"Saving to: {data_path}")
@@ -74,8 +74,8 @@ def main(cfg):
 
         # Rollout expert policy
         for _ in range(task.max_steps):
-            act = agent.act(obs, info)
-            # act = agent.act(info['lang_goal'])
+            # act = agent.act(obs, info)
+            act = agent.act(obs, info['lang_goal'])
             episode.append((obs, act, reward, info))
             lang_goal = info['lang_goal']
             obs, reward, done, info = env.step(act)

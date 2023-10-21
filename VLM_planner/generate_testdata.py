@@ -8,23 +8,34 @@ from cliport import tasks
 from cliport.environments.environment import Environment
 
 
-for task_name in ['stack-blocks',
-                  'put-blocks-on-corner-side',
-                  'put-blocks-matching-colors',
-                  'put-blocks-mismatched-colors',
-                  'put-blocks-different-corners',
-                  'stack-blocks-cool-colors',
-                  'stack-blocks-warm-colors',
-                  'sort-primary-color-blocks']:
+# for task_name in ['stack-blocks',
+#                   'put-blocks-on-corner-side',
+#                   'put-blocks-matching-colors',
+#                   'put-blocks-mismatched-colors',
+#                   'put-blocks-different-corners',
+#                   'stack-blocks-cool-colors',
+#                   'stack-blocks-warm-colors',
+#                   'sort-primary-color-blocks']:
 
-# for task_name in ['sort-primary-color-blocks']:
+# for task_name in ['put-letters-alphabetical-order',
+#                   'spell-word',
+#                   'separate-vowels',
+#                   'put-letters-reverse-alphabetical-order',
+#                   'spell-sport',
+#                   'sort-symmetrical-letters',
+#                   'separate-consonants',
+#                   'sort-letters-less-than-d']:
+
+for task_name in ['put-letters-alphabetical-order',
+                  'put-letters-reverse-alphabetical-order']:
 
     n_eval = 20
     save_video = False
     root_dir = '/home/huyingdong/cliport-master'
     assets_root = os.path.join(root_dir, 'cliport/environments/assets/')
 
-    save_dir = '/home/huyingdong/cliport-master/VLM_planner/testdata'
+    data_dir = 'testdata-letters'
+    save_dir = os.path.join('/home/huyingdong/cliport-master/VLM_planner', data_dir)
     save_dir = os.path.join(save_dir, task_name)
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -53,8 +64,6 @@ for task_name in ['stack-blocks',
     # Initialize scripted oracle agent
     agent = task.step_oracle(env)
 
-    success_times = 0
-
     for i in range(n_eval):
         print(f'\nEvaluation Instance: {i + 1}/{n_eval}')
 
@@ -67,8 +76,6 @@ for task_name in ['stack-blocks',
         env.set_task(task)
         obs = env.reset()
         front_obs = obs['color'][0]   # front camera, 480 x 640 x 3
-        # top_down_obs, _, _ = task.get_true_image(env)
-        # top_down_obs = np.transpose(top_down_obs, (1, 0, 2))
         top_down_obs, _, _ = env.render_camera(task.oracle_cams[0])
         info = env.info
 
