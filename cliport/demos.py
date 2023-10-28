@@ -49,7 +49,6 @@ def main(cfg):
     while dataset.n_episodes < cfg['n']:
         episode, total_reward = [], 0
         seed += 2
-        seed = 62
 
         # Set seeds.
         np.random.seed(seed)
@@ -61,11 +60,11 @@ def main(cfg):
         obs = env.reset()
         info = env.info
         reward = 0
-        ########################################
-        top_down_obs, _, _ = env.render_camera(task.oracle_cams[0])
-        import imageio
-        imageio.imwrite('/home/huyingdong/cliport-master/images/demos_{}_seed{}.png'.format(cfg['task'], seed), top_down_obs)
-        ########################################
+        # ########################################
+        # top_down_obs, _, _ = env.render_camera(task.oracle_cams[0])
+        # import imageio
+        # imageio.imwrite('/home/huyingdong/cliport-master/images/demos_{}_seed{}.png'.format(cfg['task'], seed), top_down_obs)
+        # ########################################
 
         # Unlikely, but a safety check to prevent leaks.
         if task.mode == 'val' and seed > (-1 + 10000):
