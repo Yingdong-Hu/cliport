@@ -224,9 +224,11 @@ def sample_gaussian_distribution(pick_mask, n_samples=1):
     center_mask = np.zeros_like(pick_mask).astype(np.float32)
     center_mask[int(center_row), int(center_col)] = 1.0
     center_prob = gaussian_filter(center_mask, sigma=1)
-    pick_mask = pick_mask * center_prob
 
-    flat_prob = pick_mask.flatten() / np.sum(pick_mask)
+    filtered_pick_mask = pick_mask.astype(np.float32) * center_prob
+    normalized_filtered_pick_mask = filtered_pick_mask / np.sum(filtered_pick_mask)
+    flat_prob = normalized_filtered_pick_mask.flatten()
+
     rand_ind = np.random.choice(
         np.arange(len(flat_prob)), n_samples, p=flat_prob, replace=False)
     rand_ind_coords = np.array(np.unravel_index(rand_ind, pick_mask.shape)).T

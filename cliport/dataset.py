@@ -455,6 +455,60 @@ class RavensMultiTaskDataset(RavensDataset):
             ],
         },
 
+        # primitive tasks
+        'multi-9tasks-primitive': {
+            'train': ['stack-blocks',
+                      'put-blocks-on-corner-side',
+                      'put-blocks-matching-colors',
+                      'put-blocks-mismatched-colors',
+                      'put-blocks-different-corners',
+                      'put-letters-alphabetical-order',
+                      'spell-word',
+                      'separate-vowels',
+                      'separate-consonants'],
+            'val': ['stack-blocks',
+                    'put-blocks-on-corner-side',
+                    'put-blocks-matching-colors',
+                    'put-blocks-mismatched-colors',
+                    'put-blocks-different-corners',
+                    'put-letters-alphabetical-order',
+                    'spell-word',
+                    'separate-vowels',
+                    'separate-consonants'],
+            'test': ['stack-blocks',
+                     'put-blocks-on-corner-side',
+                     'put-blocks-matching-colors',
+                     'put-blocks-mismatched-colors',
+                     'put-blocks-different-corners',
+                     'put-letters-alphabetical-order',
+                     'spell-word',
+                     'separate-vowels',
+                     'separate-consonants'],
+        },
+
+        # CLIPort long, fed in only the high-level instructions
+        'multi-cliport-long': {
+            'train': ['stack-blocks',
+                      'put-blocks-on-corner-side',
+                      'put-blocks-matching-colors',
+                      'put-letters-alphabetical-order',
+                      'spell-word',
+                      'separate-vowels'],
+            'val': ['stack-blocks',
+                    'put-blocks-on-corner-side',
+                    'put-blocks-matching-colors',
+                    'put-letters-alphabetical-order',
+                    'spell-word',
+                    'separate-vowels'],
+            'test': ['stack-blocks',
+                     'put-blocks-on-corner-side',
+                     'put-blocks-matching-colors',
+                     'put-letters-alphabetical-order',
+                     'spell-word',
+                     'separate-vowels'],
+        },
+
+
         # blocks and bowls tasks
         'multi-blocks-and-bowls': {
             'train': ['stack-blocks',
@@ -482,6 +536,31 @@ class RavensMultiTaskDataset(RavensDataset):
                      'put-blocks-on-corner-side',
                      'put-blocks-matching-colors',
                      'put-blocks-mismatched-colors'],
+        },
+
+        # Letters tasks
+        'multi-letters-primitive': {
+            'train': ['put-letters-alphabetical-order',
+                      'spell-word',
+                      'separate-vowels'],
+            'val': ['put-letters-alphabetical-order',
+                    'spell-word',
+                    'separate-vowels'],
+            'test': ['put-letters-alphabetical-order',
+                     'spell-word',
+                     'separate-vowels']
+        },
+
+        'multi-letters': {
+            'train': ['put-letters-alphabetical-order',
+                      'spell-word',
+                      'separate-vowels'],
+            'val': ['put-letters-alphabetical-order',
+                    'spell-word',
+                    'separate-vowels'],
+            'test': ['put-letters-alphabetical-order',
+                     'spell-word',
+                     'separate-vowels']
         },
 
         ##### multi-attr tasks

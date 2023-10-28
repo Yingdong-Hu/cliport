@@ -76,7 +76,7 @@ class StackBlocks(Task):
         return all_colors
 
     def success(self):
-        height_threshold = 0.01 + 0.04 * (len(self.blocks) - 1)
+        height_threshold = 0.01 + 0.04 * (len(self.blocks) - 1)  # TODO: check this
         block_positions = [p.getBasePositionAndOrientation(b[0])[0] for b in self.blocks]
         block_heights = [position[2] for position in block_positions]
         for height in block_heights:

@@ -26,8 +26,8 @@ def main(cfg):
     save_data = cfg['save_data']
 
     # Initialize scripted oracle agent and dataset.
-    # agent = task.oracle(env)
-    agent = task.step_oracle(env)
+    agent = task.oracle(env)
+    # agent = task.step_oracle(env)
     data_path = os.path.join(cfg['data_dir'], "{}-{}".format(cfg['task'], task.mode))
     dataset = RavensDataset(data_path, cfg, n_demos=0, augment=False)
     print(f"Saving to: {data_path}")
@@ -49,6 +49,7 @@ def main(cfg):
     while dataset.n_episodes < cfg['n']:
         episode, total_reward = [], 0
         seed += 2
+        seed = 62
 
         # Set seeds.
         np.random.seed(seed)
@@ -60,6 +61,11 @@ def main(cfg):
         obs = env.reset()
         info = env.info
         reward = 0
+        ########################################
+        top_down_obs, _, _ = env.render_camera(task.oracle_cams[0])
+        import imageio
+        imageio.imwrite('/home/huyingdong/cliport-master/images/demos_{}_seed{}.png'.format(cfg['task'], seed), top_down_obs)
+        ########################################
 
         # Unlikely, but a safety check to prevent leaks.
         if task.mode == 'val' and seed > (-1 + 10000):
@@ -74,8 +80,8 @@ def main(cfg):
 
         # Rollout expert policy
         for _ in range(task.max_steps):
-            # act = agent.act(obs, info)
-            act = agent.act(obs, info['lang_goal'])
+            act = agent.act(obs, info)
+            # act = agent.act(obs, info['lang_goal'])
             episode.append((obs, act, reward, info))
             lang_goal = info['lang_goal']
             obs, reward, done, info = env.step(act)

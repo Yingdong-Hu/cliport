@@ -127,11 +127,11 @@ class Task():
                 return
 
             # Get picking pose.
-            # pick_prob = np.float32(pick_mask)
-            # pick_pix = utils.sample_distribution(pick_prob)
+            pick_prob = np.float32(pick_mask)
+            pick_pix = utils.sample_distribution(pick_prob)
 
-            # Get picking pose.
-            pick_pix = utils.sample_gaussian_distribution(pick_mask)
+            # # Get picking pose.
+            # pick_pix = utils.sample_gaussian_distribution(pick_mask)
 
             # For "deterministic" demonstrations on insertion-easy, use this:
             # pick_pix = (160, 80)

@@ -1,4 +1,4 @@
-"""Ravens main training script."""
+"""run evaluation on test set, start from seed 9999, increment by 2 each time"""
 
 import os
 import pickle
@@ -30,9 +30,8 @@ def main(vcfg):
 
     # Choose eval mode and task.
     mode = vcfg['mode']
+    assert mode == 'test', "Only test mode is supported for now."
     eval_task = vcfg['eval_task']
-    if mode not in {'train', 'val', 'test'}:
-        raise Exception("Invalid mode. Valid options: train, val, test")
 
     # Load eval dataset.
     dataset_type = vcfg['type']
@@ -99,11 +98,13 @@ def main(vcfg):
             n_demos = vcfg['n_demos']
             success_times = 0
 
+            seed = 9999
+
             # Run testing and save total rewards with last transition info.
             for i in range(0, n_demos):
                 print(f'Test: {i + 1}/{n_demos}')
-                episode, seed = ds.load(i)
-                goal = episode[-1]
+
+                seed += 2
                 total_reward = 0
                 np.random.seed(seed)
                 random.seed(seed)
@@ -124,6 +125,13 @@ def main(vcfg):
                 info = env.info
                 reward = 0
 
+                # ########################################
+                # top_down_obs, _, _ = env.render_camera(task.oracle_cams[0])
+                # import imageio
+                # imageio.imwrite('/home/huyingdong/cliport-master/images/eval_{}_seed{}.png'.format(vcfg['eval_task'], seed),
+                #                 top_down_obs)
+                # ########################################
+
                 # Start recording video (NOTE: super slow)
                 if record:
                     video_name = f'{task_name}-{i+1:06d}'
@@ -134,19 +142,23 @@ def main(vcfg):
                 for _ in range(task.max_steps):
                     if vcfg['high_level_lang_goal']:
                         info['lang_goal'] = info['high_level_lang_goal']
-                    act = agent.act(obs, info, goal)
+                    act = agent.act(obs, info, None)
                     lang_goal = info['lang_goal']
                     print(f'Lang Goal: {lang_goal}')
                     obs, reward, done, info = env.step(act)
                     total_reward += reward
-                    print(f'Total Reward: {total_reward:.3f} | Done: {done}\n')
-                    if done:
+                    success = info['success']
+                    print(f'Total Reward: {total_reward:.3f} | Done: {done} | Success: {success}\n')
+                    if done or success:
                         break
 
-                if total_reward > 0.99:
+                if info['success']:
                     success_times += 1
-                results.append((total_reward, info))
-                mean_reward = np.mean([r for r, i in results])
+                # results.append((total_reward, info))
+                results.append({'episode_id': i + 1,
+                                'total_reward': total_reward,
+                                'success': bool(info['success'])})
+                mean_reward = np.mean([r['total_reward'] for r in results])
                 print(f'Mean: {mean_reward} | Task: {task_name} | Ckpt: {ckpt}')
 
                 # End recording video
@@ -156,7 +168,7 @@ def main(vcfg):
             all_results[ckpt] = {
                 'episodes': results,
                 'mean_reward': mean_reward,
-                'success_rate': success_times / n_demos,
+                'success_rate': f'{success_times}/{n_demos}',
             }
 
         # Save results in a json file.
