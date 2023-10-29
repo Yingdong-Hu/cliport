@@ -324,6 +324,8 @@ class Environment(gym.Env):
             info['high_level_lang_goal'] = self.task.high_level_lang_goal
         if hasattr(self.task, 'success'):
             info['success'] = self.task.success()
+        if hasattr(self.task, 'letter_affordance'):
+            info['letter_affordance'] = self.task.letter_affordance
         return info
 
     def set_task(self, task):

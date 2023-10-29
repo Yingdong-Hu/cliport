@@ -98,7 +98,9 @@ def main(vcfg):
             n_demos = vcfg['n_demos']
             success_times = 0
 
+            #################
             seed = 9999
+            #################
 
             # Run testing and save total rewards with last transition info.
             for i in range(0, n_demos):

@@ -60,6 +60,10 @@ class PutLettersAlphabeticalOrder(Task):
             self.letter2id[letter_names[i]] = letter_id
         self.letters = letters
 
+        self.letter_affordance = {}
+        for letter, id in self.letter2id.items():
+            self.letter_affordance[letter] = 1.0
+
         # Goal: putting the letters on the tables in alphabetical order
         bottom_left_corner_pose = (bottom_left_corner_pos, (0, 0, 0, 1))
 

@@ -70,6 +70,10 @@ class SpellSport(Task):
             sport_letters.append((letter_id, (0, None)))
         self.sport_letters = sport_letters
 
+        self.letter_affordance = {}
+        for letter, id in self.letter2id.items():
+            self.letter_affordance[letter] = 1.0
+
         # Goal: correctly spell out a sport using the present letters
         bottom_left_corner_pose = (bottom_left_corner_pos, (0, 0, 0, 1))
 

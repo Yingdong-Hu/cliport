@@ -76,6 +76,10 @@ class SortLettersLessThanD(Task):
             if os.path.exists(urdf):
                 os.remove(urdf)
 
+        self.letter_affordance = {}
+        for letter, id in self.letter2id.items():
+            self.letter_affordance[letter] = 1.0
+
         bottom_side_pose = (bottom_side_pos, (0, 0, 0, 1))
         place_y = [i * 0.1 for i in range(n_less_than_d_letters)]
         relative_pos = [(0, y, 0.01) for y in place_y]
