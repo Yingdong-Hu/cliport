@@ -98,7 +98,18 @@ class StackBlocksWarmColors(Task):
         cool_block_heights = [p.getBasePositionAndOrientation(bid)[0][2] for bid, _ in self.cool_blocks]
         cool_on_ground = all([h <= 0.03 for h in cool_block_heights])
 
-        return warm_is_stacked and cool_on_ground
+        warm_not_on_cool = True
+        for cool_bid, _ in self.cool_blocks:
+            cool_pose = p.getBasePositionAndOrientation(cool_bid)
+            for warm_bid, _ in self.warm_blocks:
+                warm_pose = p.getBasePositionAndOrientation(warm_bid)
+                if self.is_match(cool_pose, warm_pose, symmetry=0):
+                    warm_not_on_cool = False
+                    break
+            if not warm_not_on_cool:
+                break
+
+        return warm_is_stacked and cool_on_ground and warm_not_on_cool
 
     def step_oracle(self, env):
         """Oracle agent."""
