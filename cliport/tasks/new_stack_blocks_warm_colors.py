@@ -89,7 +89,7 @@ class StackBlocksWarmColors(Task):
         self.cool_blocks = cool_blocks
 
         # Only one mistake allowed.
-        self.max_steps = len(warm_blocks) + 1
+        self.max_steps = len(warm_blocks)
 
         self.high_level_lang_goal = 'stack only the blocks of warm colors'
 

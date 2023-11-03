@@ -78,7 +78,7 @@ class SortPrimaryColorBlocks(Task):
             self.lang_goals.append(self.lang_template.format(pick=selected_primary_color_names[i]))
 
         # Only one mistake allowed.
-        self.max_steps = n_primary_blocks + 1
+        self.max_steps = n_primary_blocks
 
         # Add distractor blocks.
         distractor_color_names = [cn for cn in color_names if cn not in primary_color_names]
