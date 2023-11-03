@@ -96,9 +96,9 @@ class SortPrimaryColorBlocks(Task):
             if not obj_id:
                 continue
             p.changeVisualShape(obj_id, -1, rgbaColor=color + [1])
-            n_distractors += 1
             self.color2block_id[distractor_color_names[n_distractors]] = obj_id
             self.blockbowl_affordance[distractor_color_names[n_distractors] + ' block'] = 1.0
+            n_distractors += 1
 
         self.high_level_lang_goal = 'Stack the primary color blocks on the left side'
 
