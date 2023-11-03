@@ -18,8 +18,7 @@ class SeparateVowels(Task):
         self.max_steps = 10
         self.pos_eps = 0.05
         self.lang_template = "pick up the {pick} and place it on the {place}"
-        # Separate the vowels from the remaining letters to the bottom side
-        self.task_completed_desc = "done separating the vowels from the remaining letters to the bottom side."
+        self.task_completed_desc = "done sorting the vowels from the remaining letters to the bottom side."
 
     def reset(self, env):
         super().reset(env)
@@ -81,7 +80,7 @@ class SeparateVowels(Task):
         for letter, id in self.letter2id.items():
             self.letter_affordance[letter] = 1.0
 
-        # Goal: separating the vowels from the remaining letters to the bottom side
+        # Goal: sorting the vowels from the remaining letters to the bottom side
         bottom_side_pose = (bottom_side_pos, (0, 0, 0, 1))
         place_y = [i * 0.1 for i in range(n_vowel_letters)]
         relative_pos = [(0, y, 0.01) for y in place_y]

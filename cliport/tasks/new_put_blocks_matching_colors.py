@@ -85,15 +85,14 @@ class PutBlocksMatchingColors(Task):
                 continue
             obj_id = env.add_object(urdf, pose)
             color = distractor_colors[n_distractors]
-            if not obj_id:
-                continue
-            p.changeVisualShape(obj_id, -1, rgbaColor=color + [1])
-            n_distractors += 1
-
             if is_block:
                 self.blockbowl_affordance[distractor_color_names[n_distractors] + ' block'] = 1.0
             else:
                 self.blockbowl_affordance[distractor_color_names[n_distractors] + ' bowl'] = 1.0
+            if not obj_id:
+                continue
+            p.changeVisualShape(obj_id, -1, rgbaColor=color + [1])
+            n_distractors += 1
 
         self.high_level_lang_goal = 'put all the blocks on the bowls with matching colors'
 
