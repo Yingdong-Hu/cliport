@@ -40,6 +40,10 @@ class PutBlocksDifferentCorners(Task):
         all_corner_pos = [utils.CORNER_OR_SIDE[c] for c in corner]
         all_corner_pos = [(c[0], c[1], 0.02) for c in all_corner_pos]
 
+        self.blockbowl_affordance = {}
+        for key, _ in utils.CORNER_OR_SIDE.items():
+            self.blockbowl_affordance[key] = 1.0
+
         # Add bowls.
         bowl_size = (0.12, 0.12, 0)
         bowl_urdf = 'bowl/bowl.urdf'
@@ -49,6 +53,7 @@ class PutBlocksDifferentCorners(Task):
             bowl_id = env.add_object(bowl_urdf, bowl_pose, 'fixed')
             p.changeVisualShape(bowl_id, -1, rgbaColor=bowl_colors[i] + [1])
             bowl_poses.append(bowl_pose)
+            self.blockbowl_affordance[bowl_color_names[i] + ' bowl'] = 1.0
 
         # Add blocks.
         blocks = []
@@ -61,6 +66,7 @@ class PutBlocksDifferentCorners(Task):
             p.changeVisualShape(block_id, -1, rgbaColor=block_colors[i] + [1])
             blocks.append((block_id, (0, None)))
             self.color2block_id[block_color_names[i]] = block_id
+            self.blockbowl_affordance[block_color_names[i] + ' block'] = 1.0
         self.blocks = blocks
 
         all_corner_pose = [(c, (0, 0, 0, 1)) for c in all_corner_pos]

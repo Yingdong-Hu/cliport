@@ -35,6 +35,10 @@ class StackBlocksWarmColors(Task):
         bowl_color_names = random.sample(color_names, n_bowls)
         bowl_colors = [utils.COLORS[cn] for cn in bowl_color_names]
 
+        self.blockbowl_affordance = {}
+        for key, _ in utils.CORNER_OR_SIDE.items():
+            self.blockbowl_affordance[key] = 1.0
+
         # Add bowls.
         bowl_size = (0.12, 0.12, 0)
         bowl_urdf = 'bowl/bowl.urdf'
@@ -44,6 +48,7 @@ class StackBlocksWarmColors(Task):
             bowl_id = env.add_object(bowl_urdf, bowl_pose, 'fixed')
             p.changeVisualShape(bowl_id, -1, rgbaColor=bowl_colors[i] + [1])
             bowl_poses.append(bowl_pose)
+            self.blockbowl_affordance[bowl_color_names[i] + ' bowl'] = 1.0
 
         # Add blocks.
         warm_blocks = []
@@ -59,6 +64,7 @@ class StackBlocksWarmColors(Task):
             p.changeVisualShape(block_id, -1, rgbaColor=selected_warm_colors[i] + [1])
             warm_blocks.append((block_id, (0, None)))
             self.color2block_id[selected_warm_color_names[i]] = block_id
+            self.blockbowl_affordance[selected_warm_color_names[i] + ' block'] = 1.0
         self.warm_blocks = warm_blocks
 
         place_height = [0.03 + (i + 1) * 0.04 for i in range(n_warm_blocks - 1)]
@@ -79,6 +85,7 @@ class StackBlocksWarmColors(Task):
             p.changeVisualShape(block_id, -1, rgbaColor=selected_cool_colors[i] + [1])
             cool_blocks.append((block_id, (0, None)))
             self.color2block_id[selected_cool_color_names[i]] = block_id
+            self.blockbowl_affordance[selected_cool_color_names[i] + ' block'] = 1.0
         self.cool_blocks = cool_blocks
 
         # Only one mistake allowed.

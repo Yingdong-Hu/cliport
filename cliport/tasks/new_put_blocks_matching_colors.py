@@ -27,6 +27,10 @@ class PutBlocksMatchingColors(Task):
         selected_color_names = random.sample(color_names, n_bowls)
         colors = [utils.COLORS[cn] for cn in selected_color_names]
 
+        self.blockbowl_affordance = {}
+        for key, _ in utils.CORNER_OR_SIDE.items():
+            self.blockbowl_affordance[key] = 1.0
+
         # Add bowls.
         bowl_poses = []
         bowl_size = (0.12, 0.12, 0)
@@ -44,6 +48,7 @@ class PutBlocksMatchingColors(Task):
             p.changeVisualShape(bowl_id, -1, rgbaColor=colors[i] + [1])
             bowl_poses.append(bowl_pose)
             self.color2bowl_id[selected_color_names[i]] = bowl_id
+            self.blockbowl_affordance[selected_color_names[i] + ' bowl'] = 1.0
 
             # Add block.
             block_pose = self.get_random_pose(env, block_size)
@@ -51,6 +56,7 @@ class PutBlocksMatchingColors(Task):
             p.changeVisualShape(block_id, -1, rgbaColor=colors[i] + [1])
             blocks.append((block_id, (0, None)))
             self.color2block_id[selected_color_names[i]] = block_id
+            self.blockbowl_affordance[selected_color_names[i] + ' block'] = 1.0
 
             # Add goal.
             self.goals.append(([blocks[i]], np.ones((1, 1)), [bowl_pose],
@@ -83,6 +89,11 @@ class PutBlocksMatchingColors(Task):
                 continue
             p.changeVisualShape(obj_id, -1, rgbaColor=color + [1])
             n_distractors += 1
+
+            if is_block:
+                self.blockbowl_affordance[distractor_color_names[n_distractors] + ' block'] = 1.0
+            else:
+                self.blockbowl_affordance[distractor_color_names[n_distractors] + ' bowl'] = 1.0
 
         self.high_level_lang_goal = 'put all the blocks on the bowls with matching colors'
 

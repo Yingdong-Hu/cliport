@@ -100,7 +100,7 @@ class SeparateConsonants(Task):
                                                                  place='right of ' + consonant_letter_names[i - 1]))
 
         self.max_steps = n_consonant_letters + 1
-        self.high_level_lang_goal = 'separate the consonants from the remaining letters to the bottom side'
+        self.high_level_lang_goal = 'sort the consonants from the remaining letters to the bottom side'
 
     def success(self):
         letter_poses = [p.getBasePositionAndOrientation(lid) for lid, _ in self.consonant_letters]

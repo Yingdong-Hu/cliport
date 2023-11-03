@@ -30,6 +30,10 @@ class StackBlocks(Task):
         bowl_colors = [utils.COLORS[cn] for cn in bowl_color_names]
         block_colors = [utils.COLORS[cn] for cn in block_color_names]
 
+        self.blockbowl_affordance = {}
+        for key, _ in utils.CORNER_OR_SIDE.items():
+            self.blockbowl_affordance[key] = 1.0
+
         # Add bowls.
         bowl_size = (0.12, 0.12, 0)
         bowl_urdf = 'bowl/bowl.urdf'
@@ -39,6 +43,7 @@ class StackBlocks(Task):
             bowl_id = env.add_object(bowl_urdf, bowl_pose, 'fixed')
             p.changeVisualShape(bowl_id, -1, rgbaColor=bowl_colors[i] + [1])
             bowl_poses.append(bowl_pose)
+            self.blockbowl_affordance[bowl_color_names[i] + ' bowl'] = 1.0
 
         # Add blocks.
         blocks = []
@@ -53,6 +58,7 @@ class StackBlocks(Task):
             p.changeVisualShape(block_id, -1, rgbaColor=block_colors[i] + [1])
             blocks.append((block_id, (np.pi / 2, None)))
             self.color2block_id[block_color_names[i]] = block_id
+            self.blockbowl_affordance[block_color_names[i] + ' block'] = 1.0
         self.blocks = blocks
 
         place_height = [0.03 + (i + 1) * 0.04 for i in range(n_blocks - 1)]

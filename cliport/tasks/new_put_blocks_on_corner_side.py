@@ -44,6 +44,10 @@ class PutBlocksOnCornerSide(Task):
         corner_or_side_pos = (corner_or_side_pos[0], corner_or_side_pos[1], 0)
         self.corner_or_side_pos = corner_or_side_pos
 
+        self.blockbowl_affordance = {}
+        for key, _ in utils.CORNER_OR_SIDE.items():
+            self.blockbowl_affordance[key] = 1.0
+
         # Add bowls.
         bowl_size = (0.12, 0.12, 0)
         bowl_urdf = 'bowl/bowl.urdf'
@@ -53,6 +57,7 @@ class PutBlocksOnCornerSide(Task):
             bowl_id = env.add_object(bowl_urdf, bowl_pose, 'fixed')
             p.changeVisualShape(bowl_id, -1, rgbaColor=bowl_colors[i] + [1])
             bowl_poses.append(bowl_pose)
+            self.blockbowl_affordance[bowl_color_names[i] + ' bowl'] = 1.0
 
         # Add blocks.
         blocks = []
@@ -65,6 +70,7 @@ class PutBlocksOnCornerSide(Task):
             p.changeVisualShape(block_id, -1, rgbaColor=block_colors[i] + [1])
             blocks.append((block_id, (0, None)))
             self.color2block_id[block_color_names[i]] = block_id
+            self.blockbowl_affordance[block_color_names[i] + ' block'] = 1.0
         self.blocks = blocks
 
         corner_or_side_pose = (corner_or_side_pos, (0, 0, 0, 1))

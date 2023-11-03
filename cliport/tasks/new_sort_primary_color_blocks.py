@@ -36,6 +36,10 @@ class SortPrimaryColorBlocks(Task):
         left_side_pos = utils.CORNER_OR_SIDE['left side']
         left_side_pos = (left_side_pos[0], left_side_pos[1], 0)
 
+        self.blockbowl_affordance = {}
+        for key, _ in utils.CORNER_OR_SIDE.items():
+            self.blockbowl_affordance[key] = 1.0
+
         # Add bowls.
         bowl_size = (0.12, 0.12, 0)
         bowl_urdf = 'bowl/bowl.urdf'
@@ -45,6 +49,7 @@ class SortPrimaryColorBlocks(Task):
             bowl_id = env.add_object(bowl_urdf, bowl_pose, 'fixed')
             p.changeVisualShape(bowl_id, -1, rgbaColor=bowl_colors[i] + [1])
             bowl_poses.append(bowl_pose)
+            self.blockbowl_affordance[bowl_color_names[i] + ' bowl'] = 1.0
 
         # Add blocks.
         primary_blocks = []
@@ -57,6 +62,7 @@ class SortPrimaryColorBlocks(Task):
             p.changeVisualShape(block_id, -1, rgbaColor=selected_primary_colors[i] + [1])
             primary_blocks.append((block_id, (0, None)))
             self.color2block_id[selected_primary_color_names[i]] = block_id
+            self.blockbowl_affordance[selected_primary_color_names[i] + ' block'] = 1.0
         self.primary_blocks = primary_blocks
 
         left_side_pose = (left_side_pos, (0, 0, 0, 1))
@@ -92,6 +98,7 @@ class SortPrimaryColorBlocks(Task):
             p.changeVisualShape(obj_id, -1, rgbaColor=color + [1])
             n_distractors += 1
             self.color2block_id[distractor_color_names[n_distractors]] = obj_id
+            self.blockbowl_affordance[distractor_color_names[n_distractors] + ' block'] = 1.0
 
         self.high_level_lang_goal = 'Stack the primary color blocks on the left side'
 

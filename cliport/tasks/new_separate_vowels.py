@@ -99,7 +99,7 @@ class SeparateVowels(Task):
                                                                  place='right of ' + vowel_letter_names[i - 1]))
 
         self.max_steps = n_vowel_letters + 1
-        self.high_level_lang_goal = 'separate the vowels from the remaining letters to the bottom side'
+        self.high_level_lang_goal = 'sort the vowels from the remaining letters to the bottom side'
 
     def success(self):
         letter_poses = [p.getBasePositionAndOrientation(lid) for lid, _ in self.vowel_letters]

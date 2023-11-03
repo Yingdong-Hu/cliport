@@ -326,6 +326,8 @@ class Environment(gym.Env):
             info['success'] = self.task.success()
         if hasattr(self.task, 'letter_affordance'):
             info['letter_affordance'] = self.task.letter_affordance
+        if hasattr(self.task, 'blockbowl_affordance'):
+            info['blockbowl_affordance'] = self.task.blockbowl_affordance
         return info
 
     def set_task(self, task):

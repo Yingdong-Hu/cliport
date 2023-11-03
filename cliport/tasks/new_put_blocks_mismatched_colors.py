@@ -32,6 +32,10 @@ class PutBlocksMismatchedColors(Task):
         bowl_color_names = block_color_names + random.sample(avaliable_color_names, n_bowls - n_blocks)
         bowl_colors = [utils.COLORS[cn] for cn in bowl_color_names]
 
+        self.blockbowl_affordance = {}
+        for key, _ in utils.CORNER_OR_SIDE.items():
+            self.blockbowl_affordance[key] = 1.0
+
         # Add blocks.
         blocks = []
         block_size = (0.04, 0.04, 0.04)
@@ -43,6 +47,7 @@ class PutBlocksMismatchedColors(Task):
             p.changeVisualShape(block_id, -1, rgbaColor=block_colors[i] + [1])
             blocks.append((block_id, (0, None)))
             self.color2block_id[block_color_names[i]] = block_id
+            self.blockbowl_affordance[block_color_names[i] + ' block'] = 1.0
 
         # Add bowls.
         bowl_size = (0.12, 0.12, 0)
@@ -55,6 +60,7 @@ class PutBlocksMismatchedColors(Task):
             p.changeVisualShape(bowl_id, -1, rgbaColor=bowl_colors[i] + [1])
             bowl_poses.append(bowl_pose)
             self.color2bowl_id[bowl_color_names[i]] = bowl_id
+            self.blockbowl_affordance[bowl_color_names[i] + ' bowl'] = 1.0
 
         # Goal: put the blocks in the bowls with mismatched colors
         targ_matrix = np.ones((len(blocks), len(bowl_poses)))
