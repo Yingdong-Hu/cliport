@@ -128,10 +128,20 @@ class SortPrimaryColorBlocks(Task):
             match = re.search(pattern, language_goal)
             assert match is not None, "Oracle could not parse goal"
             pick_color = match.group(1)
-            corner_or_side = match.group(2)
-            assert corner_or_side in ['top left corner', 'top side', 'top right corner', 'left side',
-                                      'right side', 'bottom right corner', 'bottom side', 'bottom left corner']
             pick_block_id = self.color2block_id[pick_color]
+            place_location = match.group(2)
+            if place_location in ['top left corner', 'top side', 'top right corner', 'left side',
+                                  'right side', 'bottom right corner', 'bottom side', 'bottom left corner']:
+                place_on_block = False
+                corner_or_side = place_location
+            else:
+                place_on_block = True
+                all_colors = self.get_colors()
+                color_pattern = r'\b(' + '|'.join(all_colors) + r')\b'
+                color_names = re.findall(color_pattern, place_location)
+                assert len(color_names) == 1, "Oracle needs exactly one color in place location"
+                place_color = color_names[0]
+                place_block_id = self.color2block_id[place_color]
 
             # pick pose
             pick_mask = np.uint8(obj_mask == pick_block_id)
@@ -142,13 +152,18 @@ class SortPrimaryColorBlocks(Task):
             pick_pose = (np.asarray(pick_pos), np.asarray((0, 0, 0, 1)))
 
             # place pose
-            corner_or_side_pos = utils.CORNER_OR_SIDE[corner_or_side]
-            corner_or_side_pos = (corner_or_side_pos[0], corner_or_side_pos[1], 0)
-            corner_or_side_pix = utils.xyz_to_pix(corner_or_side_pos, self.bounds, self.pix_size)
-            height = hmap[corner_or_side_pix[0], corner_or_side_pix[1]]
-            targ_height = height + 0.03
-            targ_pos = (corner_or_side_pos[0], corner_or_side_pos[1], targ_height)
-            targ_pose = (np.asarray(targ_pos), np.asarray((0, 0, 0, 1)))
+            if not place_on_block:
+                corner_or_side_pos = utils.CORNER_OR_SIDE[corner_or_side]
+                corner_or_side_pos = (corner_or_side_pos[0], corner_or_side_pos[1], 0)
+                corner_or_side_pix = utils.xyz_to_pix(corner_or_side_pos, self.bounds, self.pix_size)
+                height = hmap[corner_or_side_pix[0], corner_or_side_pix[1]]
+                targ_height = height + 0.03
+                targ_pos = (corner_or_side_pos[0], corner_or_side_pos[1], targ_height)
+                targ_pose = (np.asarray(targ_pos), np.asarray((0, 0, 0, 1)))
+            else:
+                place_obj_pose = p.getBasePositionAndOrientation(place_block_id)
+                targ_position = (place_obj_pose[0][0], place_obj_pose[0][1], place_obj_pose[0][2] + 0.04)
+                targ_pose = (targ_position, place_obj_pose[1])
 
             obj_pose = p.getBasePositionAndOrientation(pick_block_id)  # pylint: disable=undefined-loop-variable
             if not self.sixdof:
