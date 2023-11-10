@@ -22,13 +22,13 @@ class SortPrimaryColorBlocks(Task):
     def reset(self, env):
         super().reset(env)
         n_bowls = np.random.randint(1, 4)
-        n_primary_blocks = np.random.randint(1, 4)
+        n_primary_blocks = np.random.randint(2, 4)
 
         color_names = self.get_colors()
         bowl_color_names = random.sample(color_names, n_bowls)
         bowl_colors = [utils.COLORS[cn] for cn in bowl_color_names]
 
-        primary_color_names = ['red', 'yellow', 'blue']
+        primary_color_names = ['red', 'green', 'blue']
         selected_primary_index = np.sort(np.random.choice([0, 1, 2], n_primary_blocks, replace=False))
         selected_primary_color_names = [primary_color_names[i] for i in selected_primary_index]
         selected_primary_colors = [utils.COLORS[cn] for cn in selected_primary_color_names]
@@ -100,7 +100,7 @@ class SortPrimaryColorBlocks(Task):
             self.blockbowl_affordance[distractor_color_names[n_distractors] + ' block'] = 1.0
             n_distractors += 1
 
-        self.high_level_lang_goal = 'Stack the primary color blocks on the left side'
+        self.high_level_lang_goal = 'Stack only the blocks of RGB colors on the left side'
 
     def get_colors(self):
         all_colors = utils.ALL_COLORS
